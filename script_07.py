@@ -38,7 +38,7 @@ tmtmp = tmtmp - 273.15
 
 #-----------------------------------------------------------------------------------------------------------
 # Choose the plot size (width x height, in inches)
-plt.figure(figsize=(10,10))
+plt.figure(figsize=(8,8))
 
 # Use the Cilindrical Equidistant projection in cartopy
 ax = plt.axes(projection=ccrs.PlateCarree())
@@ -65,22 +65,22 @@ interval = 2
 levels = np.arange(data_min,data_max,interval)
 
 # Create a custom color palette 
-#colors = ["#d3d2d2", "#bcbcbc", "#969696", "#1464d2", "#1e6eeb", "#2882f0", 
-#"#3c96f5", "#50a5f5", "#78b9fa", "#96d2fa", "#b4f0fa", "#1eb41e", "#37d23c", 
-#"#50f050", "#78f573", "#96f58c", "#b4faaa", "#c8ffbe", "#ffe878", "#ffc03c", 
-#"#ffa000", "#ff6000", "#ff3200", "#e11400", "#c00000", "#a50000", "#785046", 
-#"#8c6359", "#b48b82", "#e1beb4"]
-#cmap = matplotlib.colors.ListedColormap(colors)
-#cmap.set_over('#fadad5')
-#cmap.set_under('#e5e5e5')
+colors = ["#d3d2d2", "#bcbcbc", "#969696", "#1464d2", "#1e6eeb", "#2882f0", 
+"#3c96f5", "#50a5f5", "#78b9fa", "#96d2fa", "#b4f0fa", "#1eb41e", "#37d23c", 
+"#50f050", "#78f573", "#96f58c", "#b4faaa", "#c8ffbe", "#ffe878", "#ffc03c", 
+"#ffa000", "#ff6000", "#ff3200", "#e11400", "#c00000", "#a50000", "#785046", 
+"#8c6359", "#b48b82", "#e1beb4"]
+cmap = matplotlib.colors.ListedColormap(colors)
+cmap.set_over('#fadad5')
+cmap.set_under('#e5e5e5')
 
 # Create a custom color palette 
-colors = ["#512e9e", "#5846a7", "#6678b8", "#6678b8", "#6d92c0", "#74aac9", 
-"#7cc3d1", "#8dc4b7", "#9dc69c", "#aec782", "#bec868", "#cfc94e", "#e0cb32", 
-"#f1cb18", "#e7b718", "#dea118", "#d48c18", "#ca7718", "#c06218", "#b84f10"]
-cmap = matplotlib.colors.ListedColormap(colors)
-cmap.set_over('#b03b12')
-cmap.set_under('#491494')
+#colors = ["#512e9e", "#5846a7", "#6678b8", "#6678b8", "#6d92c0", "#74aac9", 
+#"#7cc3d1", "#8dc4b7", "#9dc69c", "#aec782", "#bec868", "#cfc94e", "#e0cb32", 
+#"#f1cb18", "#e7b718", "#dea118", "#d48c18", "#ca7718", "#c06218", "#b84f10"]
+#cmap = matplotlib.colors.ListedColormap(colors)
+#cmap.set_over('#b03b12')
+#cmap.set_under('#491494')
 
 # Plot the contours
 img1 = ax.contourf(lons, lats, tmtmp, transform=ccrs.PlateCarree(), cmap=cmap, levels=levels, extend='both')    

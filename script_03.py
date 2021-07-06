@@ -34,7 +34,7 @@ tmtmp = tmtmp - 273.15
 
 #-----------------------------------------------------------------------------------------------------------
 # Choose the plot size (width x height, in inches)
-plt.figure(figsize=(10,10))
+plt.figure(figsize=(8,8))
 
 # Plot the image
 plt.imshow(tmtmp, origin='lower', cmap='nipy_spectral')

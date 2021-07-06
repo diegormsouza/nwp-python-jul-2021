@@ -1,5 +1,5 @@
 #-----------------------------------------------------------------------------------------------------------
-# INPE / CPTEC Training: NWP Data Processing With Python - Script 8: Smoothing the Contours 
+# INPE / CPTEC Training: NWP Data Processing With Python - Script 13: Choosing Fields by Levels - Streamlines  
 # Author: Diego Souza
 #-----------------------------------------------------------------------------------------------------------
 import pygrib                              # Provides a high-level interface to the ECWMF ECCODES C library for reading GRIB files
@@ -8,45 +8,46 @@ import cartopy, cartopy.crs as ccrs        # Plot maps
 import cartopy.io.shapereader as shpreader # Import shapefiles
 import numpy as np                         # Scientific computing with Python
 import matplotlib                          # Comprehensive library for creating static, animated, and interactive visualizations in Python 
-#----------------------------------------------------------------------------------------------------------- 
+#-----------------------------------------------------------------------------------------------------------   
+
+# Select the extent [min. lon, min. lat, max. lon, max. lat]
+extent = [-93.0, -60.00, -25.00, 18.00]
+#-----------------------------------------------------------------------------------------------------------
 
 # Open the GRIB file
 grib = pygrib.open("gfs.t00z.pgrb2full.0p50.f000")
- 
+
+#-----------------------------------------------------------------------------------------------------------
+
 # Select the variable
-grb = grib.select(name='2 metre temperature')[0]
+ucomp = grib.select(name='U component of wind', typeOfLevel = 'isobaricInhPa', level = 250)[0]
 
 # Get information from the file    
-init  = str(grb.analDate)      # Init date / time
-run   = str(grb.hour).zfill(2) # Run
-ftime = str(grb.forecastTime)  # Forecast hour
-valid = str(grb.validDate)     # Valid date / time 
+init  = str(ucomp.analDate)      # Init date / time
+run   = str(ucomp.hour).zfill(2) # Run
+ftime = str(ucomp.forecastTime)  # Forecast hour
+valid = str(ucomp.validDate)     # Valid date / time 
 print('Init: ' + init + ' UTC')
 print('Run: ' + run + 'Z')
 print('Forecast: +' + ftime)
 print('Valid: ' + valid + ' UTC')
 
-# Select the extent [min. lon, min. lat, max. lon, max. lat]
-extent = [-55.0, -15.00, -35.00, 5.00]
-
 # Read the data for a specific region
-tmtmp, lats, lons = grb.data(lat1=extent[1],lat2=extent[3],lon1=extent[0]+360,lon2=extent[2]+360)
+ucomp, lats, lons = ucomp.data(lat1=extent[1],lat2=extent[3],lon1=extent[0]+360,lon2=extent[2]+360)
 
 #-----------------------------------------------------------------------------------------------------------
-# Convert from K to °C
-tmtmp = tmtmp - 273.15
 
-print("\nArray dimensions before smoothing:")
-print(tmtmp.shape)
+# Select the variable
+vcomp = grib.select(name='V component of wind', typeOfLevel = 'isobaricInhPa', level = 250)[0]
 
-# Smooth the contours
-import scipy.ndimage
-tmtmp = scipy.ndimage.zoom(tmtmp, 3)
-lats = scipy.ndimage.zoom(lats, 3)
-lons = scipy.ndimage.zoom(lons, 3)
+# Read the data for a specific region
+vcomp = vcomp.data(lat1=extent[1],lat2=extent[3],lon1=extent[0]+360,lon2=extent[2]+360)[0]
 
-print("Array dimensions after smoothing:")
-print(tmtmp.shape)
+#-----------------------------------------------------------------------------------------------------------
+
+# Calculate the wind speed
+ws = np.sqrt(ucomp**2 + vcomp**2)
+
 #-----------------------------------------------------------------------------------------------------------
 # Choose the plot size (width x height, in inches)
 plt.figure(figsize=(8,8))
@@ -56,6 +57,7 @@ ax = plt.axes(projection=ccrs.PlateCarree())
 
 # Define the image extent
 img_extent = [extent[0], extent[2], extent[1], extent[3]]
+ax.set_extent([extent[0], extent[2], extent[1], extent[3]], ccrs.PlateCarree())
 
 # Add a shapefile
 # https://geoftp.ibge.gov.br/organizacao_do_territorio/malhas_territoriais/malhas_municipais/municipio_2019/Brasil/BR/br_unidades_da_federacao.zip
@@ -70,35 +72,35 @@ gl.top_labels = False
 gl.right_labels = False
 
 # Define de contour interval
-data_min = -20
-data_max = 48 
-interval = 2
+data_min = 0
+data_max = 60 
+interval = 5
 levels = np.arange(data_min,data_max,interval)
 
 # Create a custom color palette 
-colors = ["#d3d2d2", "#bcbcbc", "#969696", "#1464d2", "#1e6eeb", "#2882f0", 
-"#3c96f5", "#50a5f5", "#78b9fa", "#96d2fa", "#b4f0fa", "#1eb41e", "#37d23c", 
-"#50f050", "#78f573", "#96f58c", "#b4faaa", "#c8ffbe", "#ffe878", "#ffc03c", 
-"#ffa000", "#ff6000", "#ff3200", "#e11400", "#c00000", "#a50000", "#785046", 
-"#8c6359", "#b48b82", "#e1beb4"]
+colors = ["#e7f2f4", "#ceeaee", "#b6e2e8", "#abdcff", "#a4d685", "#9cd04e", "#abcf2a", "#c9d21b", "#e8d50c", "#ffd100", "#ffba00", "#ffa200"]
 cmap = matplotlib.colors.ListedColormap(colors)
-cmap.set_over('#fadad5')
-cmap.set_under('#e5e5e5')
+cmap.set_over('#ff8c00')
+cmap.set_under('#fffafa')
 
 # Plot the contours
-img1 = ax.contourf(lons, lats, tmtmp, transform=ccrs.PlateCarree(), cmap=cmap, levels=levels, extend='both')    
-img2 = ax.contour(lons, lats, tmtmp, transform=ccrs.PlateCarree(), colors='white', linewidths=0.3, levels=levels)
+img1 = ax.contourf(lons, lats, ws, cmap=cmap, levels=levels, extend='both')    
+img2 = ax.contour(lons, lats, ws, colors='white', linewidths=0.3, levels=levels)
 ax.clabel(img2, inline=1, inline_spacing=0, fontsize='10',fmt = '%1.0f', colors= 'black')
 
+# Plot the streamlines
+from matplotlib.axes import Axes
+img3 = Axes.streamplot(ax, lons, lats, ucomp, vcomp, density=[4, 4], linewidth=1, color='gray', transform=ccrs.PlateCarree())
+
 # Add a colorbar
-plt.colorbar(img1, label='2 m Temperature (°C)', orientation='vertical', pad=0.05, fraction=0.05)
+plt.colorbar(img1, label='Wind Speed (kt)', orientation='vertical', pad=0.05, fraction=0.05)
 
 # Add a title
-plt.title('GFS: 2 m Temperature' , fontweight='bold', fontsize=10, loc='left')
+plt.title('GFS: Wind Speed (kt) & Direction (250 hPa)' , fontweight='bold', fontsize=10, loc='left')
 plt.title('Valid: ' + valid, fontsize=10, loc='right')
 #----------------------------------------------------------------------------------------------------------- 
 # Save the image
-plt.savefig('image_8.png')
+plt.savefig('image_13.png', bbox_inches='tight', pad_inches=0, dpi=100)
 
 # Show the image
 plt.show()

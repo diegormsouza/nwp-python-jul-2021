@@ -19,7 +19,7 @@ extent = [-78.0, -40.00, -30.00, 12.00]
 
 #-----------------------------------------------------------------------------------------------------------
 
-# Open the GRIB file
+# GRIB file name without the last three characters
 path = ("gfs.t00z.pgrb2full.0p50.f")
 
 # Data you want to process in the loop
@@ -71,7 +71,7 @@ for hour in range(hour_ini, hour_end + 1, hour_int):
 
         #-----------------------------------------------------------------------------------------------------------
         # Choose the plot size (width x height, in inches)
-        plt.figure(figsize=(10,10))
+        plt.figure(figsize=(8,8))
 
         # Use the Cilindrical Equidistant projection in cartopy
         ax = plt.axes(projection=ccrs.PlateCarree())

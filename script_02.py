@@ -20,7 +20,7 @@ tmtmp, lats, lons = grb.data(lat1=extent[1],lat2=extent[3],lon1=extent[0]+360,lo
 
 #-----------------------------------------------------------------------------------------------------------
 # Choose the plot size (width x height, in inches)
-plt.figure(figsize=(7,7))
+plt.figure(figsize=(8,8))
  
 # Plot the image
 plt.imshow(tmtmp, origin='lower', cmap='jet')
