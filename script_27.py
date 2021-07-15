@@ -66,12 +66,12 @@ def plot_maxmin_points(lon, lat, data, extrema, nsize, symbol, color='k',
 
 #----------------------------------------------------------------------------------------------------------- 
 
+# Select the extent [min. lon, min. lat, max. lon, max. lat]
+extent = [-93.0, -60.00, -25.00, 18.00] 
+
 # Input and output directories
 input = "Samples"; os.makedirs(input, exist_ok=True)
 output = "Output"; os.makedirs(output, exist_ok=True)
-
-# Select the extent [min. lon, min. lat, max. lon, max. lat]
-extent = [-93.0, -60.00, -25.00, 18.00] # Min lon, Max lon, Min lat, Max lat
 
 # Datetime to process (today in this example, to match the GFS date)
 #date = datetime.today().strftime('%Y%m%d')
@@ -79,10 +79,10 @@ extent = [-93.0, -60.00, -25.00, 18.00] # Min lon, Max lon, Min lat, Max lat
 yyyymmddhhmn = '202107020000' # CHANGE THIS DATE TO THE SAME DATE OF YOUR NWP DATA
 
 #-----------------------------------------------------------------------------------------------------------
-# Get the Band 13 Data
 
-# Download the file
+# Download the ABI file
 file_ir = download_CMI(yyyymmddhhmn, 13, input)
+
 #-----------------------------------------------------------------------------------------------------------
 # Variable
 var = 'CMI'
@@ -163,16 +163,18 @@ data_metar = data_metar.dropna(how='any', subset=['wind_direction', 'wind_speed'
 
 #-----------------------------------------------------------------------------------------------------------
 
+# Choose the plot size (width x height, in inches)
+plt.figure(figsize=(8,8))
+
 # Set up the map projection
 proj = ccrs.PlateCarree()
 
-# Create the figure and an axes set to the projection.
-fig = plt.figure(figsize=(8, 8))
-ax = fig.add_subplot(1, 1, 1, projection=proj)
-ax.set_extent([extent[0], extent[2], extent[1], extent[3]], ccrs.PlateCarree())
+# Use the Geostationary projection in cartopy
+ax = plt.axes(projection=proj)
 
 # Define the image extent
 img_extent = [extent[0], extent[2], extent[1], extent[3]]
+ax.set_extent([extent[0], extent[2], extent[1], extent[3]], ccrs.PlateCarree())
 
 # Change the DPI of the resulting figure. Higher DPI drastically improves the
 # look of the text rendering.
@@ -257,7 +259,7 @@ stationplot.plot_text((2, 0), data_metar['station_id'].values)
 date = (datetime.strptime(dtime, '%Y-%m-%dT%H:%M:%S.%fZ'))
 
 # Add a title
-plt.title('GOES-16 Band 13 ' + date.strftime('%Y-%m-%d %H:%M') + ' UTC' + ' + METAR + PSML (hPa)', fontweight='bold', fontsize=6, loc='left')
+plt.title('GOES-16 Band 13 ' + date.strftime('%Y-%m-%d %H:%M') + ' UTC' + ' + METAR + GFS PSML (hPa)', fontweight='bold', fontsize=6, loc='left')
 plt.title('Reg.: ' + str(extent) , fontsize=6, loc='right')
 
 # Save the image

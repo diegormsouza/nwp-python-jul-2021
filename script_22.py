@@ -65,7 +65,7 @@ input = "Samples"; os.makedirs(input, exist_ok=True)
 output = "Output"; os.makedirs(output, exist_ok=True)
 
 # Select the extent [min. lon, min. lat, max. lon, max. lat]
-extent = [-93.0, -60.00, -25.00, 18.00] # Min lon, Max lon, Min lat, Max lat
+extent = [-93.0, -60.00, -25.00, 18.00]
 
 # Datetime to process (today in this example, to match the GFS date)
 #date = datetime.today().strftime('%Y%m%d')
@@ -73,10 +73,10 @@ extent = [-93.0, -60.00, -25.00, 18.00] # Min lon, Max lon, Min lat, Max lat
 yyyymmddhhmn = '202107020000' # CHANGE THIS DATE TO THE SAME DATE OF YOUR NWP DATA
 
 #-----------------------------------------------------------------------------------------------------------
-# Get the Band 13 Data
 
-# Download the file
+# Download the ABI file
 file_ir = download_CMI(yyyymmddhhmn, 13, input)
+
 #-----------------------------------------------------------------------------------------------------------
 # Variable
 var = 'CMI'
@@ -165,17 +165,20 @@ colormap = "gray_r" # White to black for IR channels
 # Plot the image
 img1 = ax.imshow(data, origin='upper', vmin=-80, vmax=60, extent=img_extent, cmap=colormap, alpha=1.0)
 
-# Plot thickness with multiple colors
-clevs = (np.arange(0, 5400, 30),
-         np.array([5400]),
-         np.arange(5460, 7000, 30))
-colors = ('tab:blue', 'b', 'tab:red')
-kw_clabels = {'fontsize': 11, 'inline': True, 'inline_spacing': 5, 'fmt': '%i',
-              'rightside_up': True, 'use_clabeltext': True}
-for clevthick, color in zip(clevs, colors):
-    img2 = ax.contour(lons, lats, thickness_1000_500, levels=clevthick, colors=color,
-                    linewidths=1.0, linestyles='dashed', transform=ccrs.PlateCarree())
-    ax.clabel(img2, **kw_clabels)
+# Define de contour interval
+data_min = 4900
+data_max = 5900 
+interval = 20
+levels = np.arange(data_min,data_max,interval)
+
+# Plot the contours   
+img2 = ax.contour(lons, lats, thickness_1000_500, cmap='seismic', linestyles='dashed', linewidths=1.0, levels=levels)
+ax.clabel(img2, inline=1, inline_spacing=0, fontsize='10',fmt = '%1.0f')#, colors= 'black') # For the labels to have the same colors as the cmap, just omit the "colors" variable
+
+# Get the index of elements with value "5400"
+mid_value = int(np.where(levels == 5400)[0])
+img2.collections[mid_value].set_linewidth(4)  
+img2.collections[mid_value].set_color('blue')
 
 # Define de contour interval
 data_min = 500

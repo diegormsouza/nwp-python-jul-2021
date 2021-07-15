@@ -1,7 +1,7 @@
-#-----------------------------------------------------------------------------------------------------------
+#----------------------------------------------------------------------------------------------------------------------
 # INPE / CPTEC Training: NWP Data Processing With Python - Script 9: Working With Multiple Files
 # Author: Diego Souza
-#-----------------------------------------------------------------------------------------------------------
+#----------------------------------------------------------------------------------------------------------------------
 import pygrib                              # Provides a high-level interface to the ECWMF ECCODES C library for reading GRIB files
 import matplotlib.pyplot as plt            # Plotting library
 import cartopy, cartopy.crs as ccrs        # Plot maps
@@ -9,7 +9,7 @@ import cartopy.io.shapereader as shpreader # Import shapefiles
 import numpy as np                         # Scientific computing with Python
 import matplotlib                          # Comprehensive library for creating static, animated, and interactive visualizations in Python 
 import os                                  # Miscellaneous operating system interfaces
-#----------------------------------------------------------------------------------------------------------- 
+#---------------------------------------------------------------------------------------------------------------------- 
 
 # Animation directory
 dir = "Animation"; os.makedirs(dir, exist_ok=True)
@@ -17,22 +17,22 @@ dir = "Animation"; os.makedirs(dir, exist_ok=True)
 # Select the extent [min. lon, min. lat, max. lon, max. lat]
 extent = [-78.0, -40.00, -30.00, 12.00]
 
-#-----------------------------------------------------------------------------------------------------------
+#----------------------------------------------------------------------------------------------------------------------
 
 # GRIB file name without the last three characters
-path = ("gfs.t00z.pgrb2full.0p50.f")
+file = ("gfs.t00z.pgrb2full.0p50.f")
 
 # Data you want to process in the loop
 hour_ini = 0   # Init time  
 hour_end = 24  # End time
 hour_int = 3   # Interval
 
-#-----------------------------------------------------------------------------------------------------------
+#----------------------------------------------------------------------------------------------------------------------
 
 for hour in range(hour_ini, hour_end + 1, hour_int):
 
     # File to process
-    grib = path + str(hour).zfill(3)
+    grib = file + str(hour).zfill(3)
     
     # If the file exists
     if (os.path.exists(grib)):
@@ -118,7 +118,7 @@ for hour in range(hour_ini, hour_end + 1, hour_int):
         # Add a title
         plt.title('GFS: 2 m Temperature' , fontweight='bold', fontsize=10, loc='left')
         plt.title('Valid: ' + valid, fontsize=10, loc='right')
-        #----------------------------------------------------------------------------------------------------------- 
+        #---------------------------------------------------------------------------------------------------------------------- 
 
         # Save the image
         plt.savefig('Animation//image_loop_' + str(hour) + '.png', bbox_inches='tight', pad_inches=0, dpi=100)

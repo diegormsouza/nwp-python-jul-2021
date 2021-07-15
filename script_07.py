@@ -1,14 +1,14 @@
-#-----------------------------------------------------------------------------------------------------------
+#----------------------------------------------------------------------------------------------------------------------
 # INPE / CPTEC Training: NWP Data Processing With Python - Script 7: Custom Color Palettes  
 # Author: Diego Souza
-#-----------------------------------------------------------------------------------------------------------
+#----------------------------------------------------------------------------------------------------------------------
 import pygrib                              # Provides a high-level interface to the ECWMF ECCODES C library for reading GRIB files
 import matplotlib.pyplot as plt            # Plotting library
 import cartopy, cartopy.crs as ccrs        # Plot maps
 import cartopy.io.shapereader as shpreader # Import shapefiles
 import numpy as np                         # Scientific computing with Python
 import matplotlib                          # Comprehensive library for creating static, animated, and interactive visualizations in Python 
-#----------------------------------------------------------------------------------------------------------- 
+#---------------------------------------------------------------------------------------------------------------------- 
 
 # Open the GRIB file
 grib = pygrib.open("gfs.t00z.pgrb2full.0p50.f000")
@@ -32,11 +32,11 @@ extent = [-93.0, -60.00, -25.00, 18.00]
 # Read the data for a specific region
 tmtmp, lats, lons = grb.data(lat1=extent[1],lat2=extent[3],lon1=extent[0]+360,lon2=extent[2]+360)
 
-#-----------------------------------------------------------------------------------------------------------
+#----------------------------------------------------------------------------------------------------------------------
 # Convert from K to °C
 tmtmp = tmtmp - 273.15
 
-#-----------------------------------------------------------------------------------------------------------
+#----------------------------------------------------------------------------------------------------------------------
 # Choose the plot size (width x height, in inches)
 plt.figure(figsize=(8,8))
 
@@ -74,14 +74,6 @@ cmap = matplotlib.colors.ListedColormap(colors)
 cmap.set_over('#fadad5')
 cmap.set_under('#e5e5e5')
 
-# Create a custom color palette 
-#colors = ["#512e9e", "#5846a7", "#6678b8", "#6678b8", "#6d92c0", "#74aac9", 
-#"#7cc3d1", "#8dc4b7", "#9dc69c", "#aec782", "#bec868", "#cfc94e", "#e0cb32", 
-#"#f1cb18", "#e7b718", "#dea118", "#d48c18", "#ca7718", "#c06218", "#b84f10"]
-#cmap = matplotlib.colors.ListedColormap(colors)
-#cmap.set_over('#b03b12')
-#cmap.set_under('#491494')
-
 # Plot the contours
 img1 = ax.contourf(lons, lats, tmtmp, transform=ccrs.PlateCarree(), cmap=cmap, levels=levels, extend='both')    
 img2 = ax.contour(lons, lats, tmtmp, transform=ccrs.PlateCarree(), colors='white', linewidths=0.3, levels=levels)
@@ -93,7 +85,7 @@ plt.colorbar(img1, label='2 m Temperature (°C)', orientation='vertical', pad=0.
 # Add a title
 plt.title('GFS: 2 m Temperature' , fontweight='bold', fontsize=10, loc='left')
 plt.title('Valid: ' + valid, fontsize=10, loc='right')
-#----------------------------------------------------------------------------------------------------------- 
+#---------------------------------------------------------------------------------------------------------------------- 
 # Save the image
 plt.savefig('image_7.png')
 

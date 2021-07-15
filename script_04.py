@@ -1,12 +1,12 @@
-#-----------------------------------------------------------------------------------------------------------
+#----------------------------------------------------------------------------------------------------------------------
 # INPE / CPTEC Training: NWP Data Processing With Python - Script 4: Adding a Map with Cartopy 
 # Author: Diego Souza
-#-----------------------------------------------------------------------------------------------------------
+#----------------------------------------------------------------------------------------------------------------------
 import pygrib                        # Provides a high-level interface to the ECWMF ECCODES C library for reading GRIB files
 import matplotlib.pyplot as plt      # Plotting library
 import cartopy, cartopy.crs as ccrs  # Plot maps
 import numpy as np                   # Scientific computing with Python
-#----------------------------------------------------------------------------------------------------------- 
+#---------------------------------------------------------------------------------------------------------------------- 
 
 # Open the GRIB file
 grib = pygrib.open("gfs.t00z.pgrb2full.0p50.f000")
@@ -30,11 +30,11 @@ extent = [-93.0, -60.00, -25.00, 18.00]
 # Read the data for a specific region
 tmtmp, lats, lons = grb.data(lat1=extent[1],lat2=extent[3],lon1=extent[0]+360,lon2=extent[2]+360)
 
-#-----------------------------------------------------------------------------------------------------------
+#----------------------------------------------------------------------------------------------------------------------
 # Convert from K to °C
 tmtmp = tmtmp - 273.15
 
-#-----------------------------------------------------------------------------------------------------------
+#----------------------------------------------------------------------------------------------------------------------
 # Choose the plot size (width x height, in inches)
 plt.figure(figsize=(8,8))
 
@@ -45,9 +45,9 @@ ax = plt.axes(projection=ccrs.PlateCarree())
 img_extent = [extent[0], extent[2], extent[1], extent[3]]
 
 # Add coastlines, borders and gridlines
-ax.coastlines(resolution='10m', color='black', linewidth=0.8)
-ax.add_feature(cartopy.feature.BORDERS, edgecolor='black', linewidth=0.5)
-gl = ax.gridlines(crs=ccrs.PlateCarree(), color='gray', alpha=1.0, linestyle='--', linewidth=0.25, xlocs=np.arange(-180, 180, 5), ylocs=np.arange(-90, 90, 5), draw_labels=True)
+ax.coastlines(resolution='10m', color='blue', linewidth=1.5)
+ax.add_feature(cartopy.feature.BORDERS, edgecolor='red', linewidth=1.0)
+gl = ax.gridlines(crs=ccrs.PlateCarree(), color='green', alpha=1.0, linestyle='--', linewidth=0.50, xlocs=np.arange(-180, 180, 5), ylocs=np.arange(-90, 90, 5), draw_labels=True)
 gl.top_labels = False
 gl.right_labels = False
 
@@ -60,7 +60,7 @@ plt.colorbar(img, label='2 m Temperature (°C)', extend='both', orientation='ver
 # Add a title
 plt.title('GFS: 2 m Temperature' , fontweight='bold', fontsize=10, loc='left')
 plt.title('Valid: ' + valid, fontsize=10, loc='right')
-#----------------------------------------------------------------------------------------------------------- 
+#---------------------------------------------------------------------------------------------------------------------- 
 # Save the image
 plt.savefig('image_4.png')
 

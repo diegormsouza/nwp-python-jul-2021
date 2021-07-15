@@ -60,12 +60,12 @@ def plot_maxmin_points(lon, lat, data, extrema, nsize, symbol, color='k',
 
 #----------------------------------------------------------------------------------------------------------- 
 
+# Select the extent [min. lon, min. lat, max. lon, max. lat]
+extent = [-93.0, -60.00, -25.00, 18.00]
+
 # Input and output directories
 input = "Samples"; os.makedirs(input, exist_ok=True)
 output = "Output"; os.makedirs(output, exist_ok=True)
-
-# Select the extent [min. lon, min. lat, max. lon, max. lat]
-extent = [-93.0, -60.00, -25.00, 18.00] # Min lon, Max lon, Min lat, Max lat
 
 # Datetime to process (today in this example, to match the GFS date)
 #date = datetime.today().strftime('%Y%m%d')
@@ -73,16 +73,16 @@ extent = [-93.0, -60.00, -25.00, 18.00] # Min lon, Max lon, Min lat, Max lat
 yyyymmddhhmn = '202107020000' # CHANGE THIS DATE TO THE SAME DATE OF YOUR NWP DATA
 
 #-----------------------------------------------------------------------------------------------------------
-# Download the GOES-16 file
+# Download the ABI file
 file_ir_8 = download_CMI(yyyymmddhhmn, 8, input)
 
-# Download the GOES-16 file
+# Download the ABI file
 file_ir_10 = download_CMI(yyyymmddhhmn, 10, input)
 
-# Download the GOES-16 file
+# Download the ABI file
 file_ir_12 = download_CMI(yyyymmddhhmn, 12, input)
 
-# Download the GOES-16 file
+# Download the ABI file
 file_ir_13 = download_CMI(yyyymmddhhmn, 13, input)
 #-----------------------------------------------------------------------------------------------------------
 # Variable
@@ -295,7 +295,7 @@ plot_maxmin_points(lons, lats, prmls, 'min', 25, symbol='L', color='r', transfor
 date = (datetime.strptime(dtime, '%Y-%m-%dT%H:%M:%S.%fZ'))
 
 # Add a title
-plt.title('GOES-16 Airmass RGB ' + date.strftime('%Y-%m-%d %H:%M') + ' UTC' + ' + PSML (hPa)', fontweight='bold', fontsize=6, loc='left')
+plt.title('GOES-16 Airmass RGB ' + date.strftime('%Y-%m-%d %H:%M') + ' UTC' + ' + GFS PSML (hPa)', fontweight='bold', fontsize=6, loc='left')
 plt.title('Reg.: ' + str(extent) , fontsize=6, loc='right')
 #-----------------------------------------------------------------------------------------------------------
 # Save the image

@@ -113,12 +113,17 @@ data = data.dropna(how='any', subset=['wind_direction', 'wind_speed'])
 
 #-----------------------------------------------------------------------------------------------------------
 
+# Choose the plot size (width x height, in inches)
+plt.figure(figsize=(8,8))
+
 # Set up the map projection
 proj = ccrs.PlateCarree()
 
-# Create the figure and an axes set to the projection.
-fig = plt.figure(figsize=(8, 8))
-ax = fig.add_subplot(1, 1, 1, projection=proj)
+# Use the Geostationary projection in cartopy
+ax = plt.axes(projection=proj)
+
+# Define the image extent
+img_extent = [extent[0], extent[2], extent[1], extent[3]]
 ax.set_extent([extent[0], extent[2], extent[1], extent[3]], ccrs.PlateCarree())
 
 # Change the DPI of the resulting figure. Higher DPI drastically improves the
@@ -197,7 +202,7 @@ stationplot.plot_symbol('W', data['present_weather'].values, current_weather)
 stationplot.plot_text((2, 0), data['station_id'].values)
 
 # Add a title
-plt.title('METAR + PSML (hPa) | ' + date + ' 00:00 UTC', fontsize=8, loc='center')
+plt.title('METAR + GFS PSML (hPa) | ' + date + ' 00:00 UTC', fontsize=8, loc='center')
 #-----------------------------------------------------------------------------------------------------------
 
 # Save the image

@@ -19,6 +19,9 @@ from metpy.plots import current_weather, sky_cover, StationPlot # Contains funct
 
 #-----------------------------------------------------------------------------------------------------------
 
+# Select the extent [min. lon, min. lat, max. lon, max. lat]
+extent = [-93.0, -60.00, -25.00, 18.00]
+
 # Input and output directories
 dir = "Samples"; os.makedirs(dir, exist_ok=True)
 output = "Output"; os.makedirs(output, exist_ok=True)
@@ -44,16 +47,19 @@ data = data.dropna(how='any', subset=['wind_direction', 'wind_speed'])
 
 #-----------------------------------------------------------------------------------------------------------
 
-# Select the extent [min. lon, min. lat, max. lon, max. lat]
-extent = [-93.0, -60.00, -25.00, 18.00]
+# Choose the plot size (width x height, in inches)
+plt.figure(figsize=(8,8))
 
 # Set up the map projection
 proj = ccrs.PlateCarree()
 
-# Create the figure and an axes set to the projection.
-fig = plt.figure(figsize=(8, 8))
-ax = fig.add_subplot(1, 1, 1, projection=proj)
+# Use the Geostationary projection in cartopy
+ax = plt.axes(projection=proj)
+
+# Define the image extent
+img_extent = [extent[0], extent[2], extent[1], extent[3]]
 ax.set_extent([extent[0], extent[2], extent[1], extent[3]], ccrs.PlateCarree())
+
 
 # Change the DPI of the resulting figure. Higher DPI drastically improves the
 # look of the text rendering.

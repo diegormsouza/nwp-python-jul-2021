@@ -12,7 +12,6 @@ import matplotlib                          # Comprehensive library for creating 
 
 # Select the extent [min. lon, min. lat, max. lon, max. lat]
 extent = [-93.0, -60.00, -25.00, 18.00]
-#-----------------------------------------------------------------------------------------------------------
 
 # Open the GRIB file
 grib = pygrib.open("gfs.t00z.pgrb2full.0p50.f000")
@@ -93,10 +92,10 @@ from matplotlib.axes import Axes
 img3 = Axes.streamplot(ax, lons, lats, ucomp, vcomp, density=[4, 4], linewidth=1, color='gray', transform=ccrs.PlateCarree())
 
 # Add a colorbar
-plt.colorbar(img1, label='Wind Speed (kt)', orientation='vertical', pad=0.05, fraction=0.05)
+plt.colorbar(img1, label='Isotachs (kt)', orientation='vertical', pad=0.05, fraction=0.05)
 
 # Add a title
-plt.title('GFS: Wind Speed (kt) & Direction (250 hPa)' , fontweight='bold', fontsize=10, loc='left')
+plt.title('GFS: Streamlines and Isotachs (250 hPa)' , fontweight='bold', fontsize=10, loc='left')
 plt.title('Valid: ' + valid, fontsize=10, loc='right')
 #----------------------------------------------------------------------------------------------------------- 
 # Save the image

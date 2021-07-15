@@ -23,7 +23,7 @@ input = "Samples"; os.makedirs(input, exist_ok=True)
 output = "Output"; os.makedirs(output, exist_ok=True)
 
 # Select the extent [min. lon, min. lat, max. lon, max. lat]
-extent = [-93.0, -60.00, -25.00, 18.00] # Min lon, Max lon, Min lat, Max lat
+extent = [-93.0, -60.00, -25.00, 18.00] 
 
 # Datetime to process (today in this example, to match the GFS date)
 #date = datetime.today().strftime('%Y%m%d')
@@ -31,10 +31,10 @@ extent = [-93.0, -60.00, -25.00, 18.00] # Min lon, Max lon, Min lat, Max lat
 yyyymmddhhmn = '202107020000' # CHANGE THIS DATE TO THE SAME DATE OF YOUR NWP DATA
 
 #-----------------------------------------------------------------------------------------------------------
-# Get the Band 13 Data
 
-# Download the file
+# Download the ABI file
 file_ir = download_CMI(yyyymmddhhmn, 9, input)
+
 #-----------------------------------------------------------------------------------------------------------
 # Variable
 var = 'CMI'

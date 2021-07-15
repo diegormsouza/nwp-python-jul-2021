@@ -12,7 +12,6 @@ import matplotlib                          # Comprehensive library for creating 
 
 # Select the extent [min. lon, min. lat, max. lon, max. lat]
 extent = [-93.0, -60.00, -25.00, 18.00]
-#-----------------------------------------------------------------------------------------------------------
 
 # Open the GRIB file
 grib = pygrib.open("gfs.t00z.pgrb2full.0p50.f000")
@@ -145,10 +144,10 @@ from matplotlib.axes import Axes
 img3 = Axes.streamplot(axs[0,0], lons, lats, ucomp_250, vcomp_250, density=[4, 4], linewidth=1, color='gray', transform=ccrs.PlateCarree())
 
 # Add a colorbar
-plt.colorbar(img1, label='Wind Speed (kt)', orientation='vertical', pad=0.02, fraction=0.05, ax=axs[0,0])
+plt.colorbar(img1, label='Isotachs (kt)', orientation='vertical', pad=0.02, fraction=0.05, ax=axs[0,0])
 
 # Add a title
-axs[0,0].set_title('GFS: Wind Speed (kt) & Direction (250 hPa)' , fontweight='bold', fontsize=10, loc='left')
+axs[0,0].set_title('GFS: Streamlines and Isotachs (250 hPa)' , fontweight='bold', fontsize=10, loc='left')
 axs[0,0].set_title('Valid: ' + valid, fontsize=10, loc='right')
 
 #-----------------------------------------------------------------------------------------------------------
@@ -178,10 +177,10 @@ from matplotlib.axes import Axes
 img6 = Axes.streamplot(axs[0,1], lons, lats, ucomp_500, vcomp_500, density=[4, 4], linewidth=1, color='gray', transform=ccrs.PlateCarree())
 
 # Add a colorbar
-plt.colorbar(img4, label='Wind Speed (kt)', orientation='vertical', pad=0.02, fraction=0.05, ax=axs[0,1])
+plt.colorbar(img4, label='Isotachs (kt)', orientation='vertical', pad=0.02, fraction=0.05, ax=axs[0,1])
 
 # Add a title
-axs[0,1].set_title('GFS: Wind Speed (kt) & Direction (500 hPa)' , fontweight='bold', fontsize=10, loc='left')
+axs[0,1].set_title('GFS: Streamlines and Isotachs (500 hPa)' , fontweight='bold', fontsize=10, loc='left')
 axs[0,1].set_title('Valid: ' + valid, fontsize=10, loc='right')
 
 #-----------------------------------------------------------------------------------------------------------
@@ -211,10 +210,10 @@ from matplotlib.axes import Axes
 img9 = Axes.streamplot(axs[1,0], lons, lats, ucomp_700, vcomp_700, density=[4, 4], linewidth=1, color='gray', transform=ccrs.PlateCarree())
 
 # Add a colorbar
-plt.colorbar(img7, label='Wind Speed (kt)', orientation='vertical', pad=0.02, fraction=0.05, ax=axs[1,0])
+plt.colorbar(img7, label='Isotachs (kt)', orientation='vertical', pad=0.02, fraction=0.05, ax=axs[1,0])
 
 # Add a title
-axs[1,0].set_title('GFS: Wind Speed (kt) & Direction (700 hPa)' , fontweight='bold', fontsize=10, loc='left')
+axs[1,0].set_title('GFS: Streamlines and Isotachs (700 hPa)' , fontweight='bold', fontsize=10, loc='left')
 axs[1,0].set_title('Valid: ' + valid, fontsize=10, loc='right')
 
 #----------------------------------------------------------------------------------------------------------- 
@@ -244,10 +243,10 @@ from matplotlib.axes import Axes
 img12 = Axes.streamplot(axs[1,1], lons, lats, ucomp_850, vcomp_850, density=[4, 4], linewidth=1, color='gray', transform=ccrs.PlateCarree())
 
 # Add a colorbar
-plt.colorbar(img10, label='Wind Speed (kt)', orientation='vertical', pad=0.02, fraction=0.05, ax=axs[1,1])
+plt.colorbar(img10, label='Isotachs (kt)', orientation='vertical', pad=0.02, fraction=0.05, ax=axs[1,1])
 
 # Add a title
-axs[1,1].set_title('GFS: Wind Speed (kt) & Direction (850 hPa)' , fontweight='bold', fontsize=10, loc='left')
+axs[1,1].set_title('GFS: Streamlines and Isotachs (850 hPa)' , fontweight='bold', fontsize=10, loc='left')
 axs[1,1].set_title('Valid: ' + valid, fontsize=10, loc='right')
 
 #-----------------------------------------------------------------------------------------------------------

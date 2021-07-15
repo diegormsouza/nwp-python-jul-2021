@@ -12,7 +12,6 @@ import matplotlib                          # Comprehensive library for creating 
 
 # Select the extent [min. lon, min. lat, max. lon, max. lat]
 extent = [-93.0, -60.00, -25.00, 18.00]
-#-----------------------------------------------------------------------------------------------------------
 
 # Open the GRIB file
 grib = pygrib.open("gfs.t00z.pgrb2full.0p50.f000")
@@ -98,6 +97,8 @@ cmap.set_under('#000000')
 img1 = ax.contourf(lons, lats, prmls, cmap=cmap, levels=levels, extend='both')
 img2 = ax.contour(lons, lats, prmls, colors='black', linewidths=0.1, levels=levels)
 ax.clabel(img2, inline=1, inline_spacing=0, fontsize=10,fmt = '%1.0f', colors= 'black')
+
+# Plot the barbs
 img3 = ax.barbs(lons[::4,::4], lats[::4,::4], ucomp[::4,::4], vcomp[::4,::4], length = 5.0, sizes = dict(emptybarb=0.0, spacing=0.2, height=0.5), linewidth=0.8, pivot='middle', barbcolor='gray')
 
 # Add a colorbar

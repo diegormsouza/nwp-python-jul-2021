@@ -182,8 +182,6 @@ def update(frame_no):
 # Select the extent [min. lon, min. lat, max. lon, max. lat]
 extent = [-93.0, -60.00, -25.00, 18.00]
 
-#-----------------------------------------------------------------------------------------------------------
-
 # Open the GRIB file
 grib = pygrib.open("gfs.t00z.pgrb2full.0p50.f000")
 

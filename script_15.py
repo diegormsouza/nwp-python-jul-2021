@@ -12,7 +12,6 @@ import matplotlib                          # Comprehensive library for creating 
 
 # Select the extent [min. lon, min. lat, max. lon, max. lat]
 extent = [-93.0, -60.00, -25.00, 18.00]
-#-----------------------------------------------------------------------------------------------------------
 
 # Open the GRIB file
 grib = pygrib.open("gfs.t00z.pgrb2full.0p50.f000")
@@ -91,6 +90,7 @@ ax.clabel(img2, inline=1, inline_spacing=0, fontsize='10',fmt = '%1.0f', colors=
 # Plot the quiver
 img3 = ax.quiver(lons[::4,::4], lats[::4,::4], ucomp[::4,::4], vcomp[::4,::4])
 #img3 = ax.quiver(lons[::4,::4], lats[::4,::4], ucomp[::4,::4], vcomp[::4,::4], ws[::4,::4], cmap='jet')#, width = 0.022, scale = 1 / 0.15,  color=ws, cmap='jet')
+qk = ax.quiverkey(img3, 0.50, 0.89, 20, '20 kt', labelpos='E', coordinates='figure')
 
 # Add a colorbar
 plt.colorbar(img1, label='Wind Speed (kt)', orientation='vertical', pad=0.05, fraction=0.05)

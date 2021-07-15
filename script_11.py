@@ -1,7 +1,7 @@
-#-----------------------------------------------------------------------------------------------------------
+#----------------------------------------------------------------------------------------------------------------------
 # INPE / CPTEC Training: NWP Data Processing With Python - Script 11: Average, Maximuns and Minimuns 
 # Author: Diego Souza
-#-----------------------------------------------------------------------------------------------------------
+#----------------------------------------------------------------------------------------------------------------------
 import pygrib                              # Provides a high-level interface to the ECWMF ECCODES C library for reading GRIB files
 import matplotlib.pyplot as plt            # Plotting library
 import cartopy, cartopy.crs as ccrs        # Plot maps
@@ -9,14 +9,15 @@ import cartopy.io.shapereader as shpreader # Import shapefiles
 import numpy as np                         # Scientific computing with Python
 import matplotlib                          # Comprehensive library for creating static, animated, and interactive visualizations in Python
 import os                                  # Miscellaneous operating system interfaces 
-#----------------------------------------------------------------------------------------------------------- 
+#---------------------------------------------------------------------------------------------------------------------- 
 
 # Select the extent [min. lon, min. lat, max. lon, max. lat]
 extent = [-78.0, -40.00, -30.00, 12.00]
-#-----------------------------------------------------------------------------------------------------------
 
 # GRIB file name without the last three characters
-path = ("gfs.t00z.pgrb2full.0p50.f")
+file = ("gfs.t00z.pgrb2full.0p50.f")
+
+#----------------------------------------------------------------------------------------------------------------------
 
 # Data you want to process
 # (to process only the analisys, end and inc should be equal).
@@ -26,7 +27,7 @@ hour_int = 3   # Increment
 
 for hour in range(hour_ini, hour_end + 1, hour_int):
 
-    grib = path + str(hour).zfill(3)
+    grib = file + str(hour).zfill(3)
     
     # If the file exists
     if (os.path.exists(grib)):
@@ -53,12 +54,12 @@ for hour in range(hour_ini, hour_end + 1, hour_int):
         # Read the data for a specific region
         tmtmp, lats, lons = grb.data(lat1=extent[1],lat2=extent[3],lon1=extent[0]+360,lon2=extent[2]+360)
 
-        #-----------------------------------------------------------------------------------------------------------
+        #----------------------------------------------------------------------------------------------------------------------
 
         # Convert from K to °C
         tmtmp = tmtmp - 273.15
 
-        # To smooth the contours
+        # Smooth the contours
         import scipy.ndimage
         tmtmp = scipy.ndimage.zoom(tmtmp, 3)
         lats = scipy.ndimage.zoom(lats, 3)
@@ -84,7 +85,7 @@ tmtmp_avg = tmtmp_sum / ((hour_end - hour_ini) / hour_int)
 
 print("\nAverage, Min and Max values stored!")
 
-#-----------------------------------------------------------------------------------------------------------
+#----------------------------------------------------------------------------------------------------------------------
 # Create a custom color palette 
 colors = ["#d3d2d2", "#bcbcbc", "#969696", "#1464d2", "#1e6eeb", "#2882f0", 
 "#3c96f5", "#50a5f5", "#78b9fa", "#96d2fa", "#b4f0fa", "#1eb41e", "#37d23c", 
@@ -94,12 +95,12 @@ colors = ["#d3d2d2", "#bcbcbc", "#969696", "#1464d2", "#1e6eeb", "#2882f0",
 cmap = matplotlib.colors.ListedColormap(colors)
 cmap.set_over('#fadad5')
 cmap.set_under('#e5e5e5')
-#-----------------------------------------------------------------------------------------------------------
+#----------------------------------------------------------------------------------------------------------------------
 
 # Choose the plot size (width x height, in inches)
 fig, axs = plt.subplots(1,3, figsize=(14,5), sharex = False, sharey = False, subplot_kw=dict(projection=ccrs.PlateCarree())) # 1 row x 3 columns
 
-#-----------------------------------------------------------------------------------------------------------
+#----------------------------------------------------------------------------------------------------------------------
 
 # Define the image extent
 axs[0].set_extent([extent[0], extent[2], extent[1], extent[3]], ccrs.PlateCarree())
@@ -133,7 +134,7 @@ plt.colorbar(img1, label='2 m Temperature (°C)', orientation='horizontal', pad=
 axs[0].set_title('GFS: 2 m Temperature - 24h Minimum' , fontweight='bold', fontsize=6, loc='left')
 axs[0].set_title('Valid: ' + valid, fontsize=6, loc='right')
 
-#-----------------------------------------------------------------------------------------------------------
+#----------------------------------------------------------------------------------------------------------------------
 
 # Define the image extent
 axs[1].set_extent([extent[0], extent[2], extent[1], extent[3]], ccrs.PlateCarree())
@@ -166,7 +167,7 @@ plt.colorbar(img3, label='2 m Temperature (°C)', orientation='horizontal', pad=
 # Add a title
 axs[1].set_title('GFS: 2 m Temperature - 24h Maximum' , fontweight='bold', fontsize=6, loc='left')
 axs[1].set_title('Valid: ' + valid, fontsize=6, loc='right')
-#-----------------------------------------------------------------------------------------------------------
+#----------------------------------------------------------------------------------------------------------------------
 
 # Define the image extent
 axs[2].set_extent([extent[0], extent[2], extent[1], extent[3]], ccrs.PlateCarree())
@@ -199,7 +200,7 @@ plt.colorbar(img3, label='2 m Temperature (°C)', orientation='horizontal', pad=
 # Add a title
 axs[2].set_title('GFS: 2 m Temperature - 24h Average' , fontweight='bold', fontsize=6, loc='left')
 axs[2].set_title('Valid: ' + valid, fontsize=6, loc='right')
-#----------------------------------------------------------------------------------------------------------- 
+#---------------------------------------------------------------------------------------------------------------------- 
 # Save the image
 plt.savefig('image_11.png', bbox_inches='tight', pad_inches=0, dpi=100)
 

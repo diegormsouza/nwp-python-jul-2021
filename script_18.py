@@ -1,6 +1,6 @@
 #-----------------------------------------------------------------------------------------------------------
 # INPE / CPTEC Training: NWP Data Processing With Python - Script 18: Galvez Davison Index (GDI) 
-# Author: Diego Souza
+# Author: Diego Souza / HUGE THANKS TO JUAN AMIDES FIGUEROA (MARN EL SALVADOR) AND JOSE GALVEZ
 #-----------------------------------------------------------------------------------------------------------
 import pygrib                              # Provides a high-level interface to the ECWMF ECCODES C library for reading GRIB files
 import matplotlib.pyplot as plt            # Plotting library
@@ -13,10 +13,11 @@ import math                                # Methematical Functions
 
 # Select the extent [min. lon, min. lat, max. lon, max. lat]
 extent = [-93.0, -60.00, -25.00, 18.00]
-#-----------------------------------------------------------------------------------------------------------
 
 # Open the GRIB file
 grib = pygrib.open("gfs.t00z.pgrb2full.0p50.f000")
+
+#-----------------------------------------------------------------------------------------------------------
  
 # Read the surface pressure
 sfcps = grib.select(name='Surface pressure')[0]
@@ -36,15 +37,13 @@ sfcps, lats, lons = sfcps.data(lat1=extent[1],lat2=extent[3],lon1=extent[0]+360,
 
 # Convert the surface pressure to hectopascal
 sfcps = sfcps / 100
+
 #-----------------------------------------------------------------------------------------------------------
 # Read the temperature in 950 hPa
 temp950 = grib.select(name='Temperature', typeOfLevel = 'isobaricInhPa', level = 950)[0]
 
 # Read the data for a specific region
 temp950 = temp950.data(lat1=extent[1],lat2=extent[3],lon1=extent[0]+360,lon2=extent[2]+360)[0]
-
-# Calculate the theta
-T950 = ((temp950)*(pow((1000/950),(2/7))))
 #-----------------------------------------------------------------------------------------------------------
 # Read the specific humidity in 950 hPa
 spfh950 = grib.select(name='Specific humidity', typeOfLevel = 'isobaricInhPa', level = 950)[0]
@@ -57,9 +56,6 @@ temp850 = grib.select(name='Temperature', typeOfLevel = 'isobaricInhPa', level =
 
 # Read the data for a specific region
 temp850 = temp850.data(lat1=extent[1],lat2=extent[3],lon1=extent[0]+360,lon2=extent[2]+360)[0]
-
-# Calculate the theta
-T850 = ((temp850)*(pow((1000/850),(2/7))))
 #-----------------------------------------------------------------------------------------------------------
 # Read the specific humidity in 850 hPa
 spfh850 = grib.select(name='Specific humidity', typeOfLevel = 'isobaricInhPa', level = 850)[0]
@@ -72,9 +68,6 @@ temp700 = grib.select(name='Temperature', typeOfLevel = 'isobaricInhPa', level =
 
 # Read the data for a specific region
 temp700 = temp700.data(lat1=extent[1],lat2=extent[3],lon1=extent[0]+360,lon2=extent[2]+360)[0]
-
-# Calculate the theta
-T700 = ((temp850)*(pow((1000/700),(2/7))))
 #-----------------------------------------------------------------------------------------------------------
 # Read the specific humidity in 700 hPa
 spfh700 = grib.select(name='Specific humidity', typeOfLevel = 'isobaricInhPa', level = 700)[0]
@@ -87,15 +80,26 @@ temp500 = grib.select(name='Temperature', typeOfLevel = 'isobaricInhPa', level =
 
 # Read the data for a specific region
 temp500 = temp500.data(lat1=extent[1],lat2=extent[3],lon1=extent[0]+360,lon2=extent[2]+360)[0]
-
-# Calculate the theta
-T500 = ((temp500)*(pow((1000/500),(2/7))))
 #-----------------------------------------------------------------------------------------------------------
 # Read the specific humidity in 500 hPa
 spfh500 = grib.select(name='Specific humidity', typeOfLevel = 'isobaricInhPa', level = 500)[0]
 
 # Read the data for a specific region
 R500 = spfh500.data(lat1=extent[1],lat2=extent[3],lon1=extent[0]+360,lon2=extent[2]+360)[0]
+#-----------------------------------------------------------------------------------------------------------
+#---------------------------------------------------------------------------------------------
+
+# Calculate the Theta 950
+T950 = ((temp950)*(pow((1000/950),(2/7))))
+
+# Calculate the Theta 850
+T850 = ((temp850)*(pow((1000/850),(2/7))))
+
+# Calculate the Theta 700
+T700 = ((temp850)*(pow((1000/700),(2/7))))
+
+# Calculate the Theta 500
+T500 = ((temp500)*(pow((1000/500),(2/7))))
 
 #-----------------------------------------------------------------------------------------------------------
 #---------------------------------------------------------------------------------------------
@@ -186,7 +190,7 @@ C0 = pp3 - division
 GDI = ECI + MWI + II
 GDIc = ECI + MWI + II + C0
 
-# To smooth the contours
+# Smooth the contours
 import scipy.ndimage
 GDIc = scipy.ndimage.zoom(GDIc, 3)
 lats = scipy.ndimage.zoom(lats, 3)
