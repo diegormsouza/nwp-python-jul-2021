@@ -98,8 +98,14 @@ img1 = ax.contourf(lons, lats, prmls, cmap=cmap, levels=levels, extend='both')
 img2 = ax.contour(lons, lats, prmls, colors='black', linewidths=0.1, levels=levels)
 ax.clabel(img2, inline=1, inline_spacing=0, fontsize=10,fmt = '%1.0f', colors= 'black')
 
+# Create a flag to determine which barbs are flipped
+flip_flag = np.zeros((ucomp.shape[0],ucomp.shape[1]))
+
+# All flags below the equator will be flipped
+flip_flag[lats < 0] = 1
+
 # Plot the barbs
-img3 = ax.barbs(lons[::4,::4], lats[::4,::4], ucomp[::4,::4], vcomp[::4,::4], length = 5.0, sizes = dict(emptybarb=0.0, spacing=0.2, height=0.5), linewidth=0.8, pivot='middle', barbcolor='gray')
+img3 = ax.barbs(lons[::4,::4], lats[::4,::4], ucomp[::4,::4], vcomp[::4,::4], length = 5.0, sizes = dict(emptybarb=0.0, spacing=0.2, height=0.5), linewidth=0.8, pivot='middle', barbcolor='gray', flip_barb = flip_flag[::4,::4])
 
 # Add a colorbar
 plt.colorbar(img1, label='PSML (hPa)', orientation='vertical', pad=0.05, fraction=0.05)
